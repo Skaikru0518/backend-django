@@ -1,1 +1,2 @@
-https://miklospeter.wordpress.com/hivatkozasok/
+https://miklospeter.wordpress.com/hivatkozasok/ ;
+dbdiagram.io ;
