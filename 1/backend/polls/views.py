@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import Http404, HttpResponse
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import Http404
 from .models import Question, Choice
 
 # Create your views here.
@@ -15,3 +15,21 @@ def detail(request, question_id):
         raise Http404("Question Does Not Exist!")
     context = {"question":current_question}
     return render(request, "detail.html", context)
+
+def vote(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    print(question_id)
+    try:
+        selected_choice = question.choice_set.get(pk=request.POST["choice"])
+    except (KeyError, Choice.DoesNotExist):
+        context = {"question": question, "error_message": "You didn't selected a choice!"}
+        return(request, "detail.html", context)
+    else:
+        selected_choice.vote += 1
+        selected_choice.save()
+        return redirect("polls:results", question_id=question.id)
+    
+def results(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    context = {"question": question}
+    return render(request, 'results.html', context)

@@ -1,33 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Polls</title>
-  </head>
-  <body>
-    <h1>Polls</h1>
-
-    <form action="" method="post">
-      {% csrf_token %}
-      <fieldset>
-        <legend><h1>{{question.question_text}}</h1></legend>
-        {% if error_message %}
-        <p><strong>{{error_message}}</strong></p>
-        {% endif %} {% for item in question.choice_set.all %}
-        <p>
-          <label>
-            <input
-              type="radio"
-              name="choice"
-              id="choice{{forloop.counter}}"
-              value="{{choice.id}}"
-            />
-            {{item.choice_text}}
-          </label>
-        </p>
-        {% endfor %}
-      </fieldset>
-    </form>
-  </body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<form action="{% url "polls:vote" question.id %}" method="post">
+  {% csrf_token %}
+  <fieldset>
+    <legend><h1>{{question.question_text}}</h1></legend>
+    {% if error_message %}
+    <p><strong>{{error_message}}</strong></p>
+    {% endif %} {% for item in question.choice_set.all %}
+    <p>
+      <label>
+        <input
+          type="radio"
+          name="choice"
+          id="choice{{forloop.counter}}"
+          value="{{item.id}}"
+        />
+        {{item.choice_text}}
+      </label>
+    </p>
+    {% endfor %}
+    <input type="submit" value="Vote" />
+  </fieldset>
+</form>
+{% endblock content %}
