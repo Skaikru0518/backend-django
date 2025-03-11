@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} {% block content %} {% csrf_token %}
 <form action="" method="post">
   <fieldset>
     <legend>Add new weather data</legend>
