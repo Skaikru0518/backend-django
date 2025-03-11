@@ -1,0 +1,36 @@
+{% extends "base.html" %} {% block content %}
+<form action="" method="post">
+  <fieldset>
+    <legend>Add new weather data</legend>
+    <p>
+      <label>
+        City:
+        <select name="city" id="city">
+          {% for city in cities %}
+          <option value="{{city.id}}">{{city.cityName}}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </p>
+    <p>
+      <label>
+        Temperature:
+        <input type="number" name="temp" id="temp" />
+      </label>
+    </p>
+    <p>
+      <label>
+        Rainfall:
+        <input type="number" name="raind" id="rain" min="0" step="1" />
+      </label>
+    </p>
+    <p>
+      <label>
+        Location:
+        <input type="text" name="location" id="location" />
+      </label>
+    </p>
+    <input type="submit" value="Add data" />
+  </fieldset>
+</form>
+{% endblock content %}
