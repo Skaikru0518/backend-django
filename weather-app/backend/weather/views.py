@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
 from .models import City, WeatherData
+from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 @csrf_protect
@@ -17,7 +18,7 @@ def addPage(request):
   return render(request, "add.html", context)
 
 def addMeasure(request):
- if request.method == "POST":
+ if request.method == "POST" and request.FILES["cloudscape"]:
   _cityId = request.POST["city"]
   _city = None
   if _cityId == "addNew":
@@ -30,9 +31,13 @@ def addMeasure(request):
   _temp = request.POST["temp"]
   _rain = request.POST["rain"]
   _location = request.POST["location"]
+  _imageData = request.FILES["cloudscape"]
+  fs = FileSystemStorage()
+  _imageName = fs.save(_imageData.name, _imageData)
+
 
   #peldanyositunk es megadjuk a class ertekeit, hogy mi mit kapjon postolasnal
-  newWeather = WeatherData(city = _city, temperature = _temp, rainfall = _rain, location = _location)
+  newWeather = WeatherData(city = _city, temperature = _temp, rainfall = _rain, location = _location, cloudscape = _imageName)
   newWeather.save() #adatbazisba kuldes
   return redirect("/")
 

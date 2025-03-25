@@ -1,5 +1,9 @@
 {% extends "base.html" %} {% block content %}
-<form action="{% url 'weather:addMeasure' %}" method="post">
+<form
+  action="{% url 'weather:addMeasure' %}"
+  method="post"
+  enctype="multipart/form-data"
+>
   {% csrf_token %}
   <fieldset>
     <legend>Add new weather data</legend>
@@ -33,7 +37,8 @@
         <input type="text" name="location" id="location" />
       </label>
     </p>
-    <input type="submit" value="Add data" />
+    <p><input type="file" name="cloudscape" id="cloudscape" /></p>
+    <p><input type="submit" value="Add data" /></p>
   </fieldset>
 </form>
 <script>

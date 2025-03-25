@@ -19,7 +19,7 @@ class WeatherData(models.Model):
   rainfall = models.IntegerField()
   measureTime = models.DateTimeField(default=now)
   location = models.CharField(max_length=150)
-  
+  cloudscape = ""
 
   def __str__(self): # ez jelöli, hogy az admin felületen mit lássunk belőle
       return f"{self.location} ({self.measureTime})"
