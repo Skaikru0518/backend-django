@@ -1,16 +1,19 @@
-{% extends "base.html" %} {% block content %} {% csrf_token %}
-<form action="" method="post">
+{% extends "base.html" %} {% block content %}
+<form action="{% url 'weather:addMeasure' %}" method="post">
+  {% csrf_token %}
   <fieldset>
     <legend>Add new weather data</legend>
     <p>
       <label>
         City:
-        <select name="city" id="city">
+        <select name="city" id="city" onchange="showHide()">
           {% for city in cities %}
           <option value="{{city.id}}">{{city.cityName}}</option>
           {% endfor %}
+          <option action="addNew">Add new city</option>
         </select>
       </label>
+      <input type="text" name="newCity" id="newCity" hidden />
     </p>
     <p>
       <label>
@@ -21,7 +24,7 @@
     <p>
       <label>
         Rainfall:
-        <input type="number" name="raind" id="rain" min="0" step="1" />
+        <input type="number" name="rain" id="rain" min="0" step="1" />
       </label>
     </p>
     <p>
@@ -33,4 +36,18 @@
     <input type="submit" value="Add data" />
   </fieldset>
 </form>
+<script>
+  function showHide() {
+    let citySelect = document.getElementById("city");
+    let newCityInput = document.getElementById("newCity");
+
+    // Either check the selected option's text
+    newCityInput.hidden =
+      citySelect.options[citySelect.selectedIndex].text !== "Add new city";
+
+    // Or use an index check
+    newCityInput.hidden =
+      citySelect.selectedIndex !== citySelect.options.length - 1;
+  }
+</script>
 {% endblock content %}

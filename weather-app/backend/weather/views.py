@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import City, WeatherData
 
 # Create your views here.
@@ -15,3 +15,23 @@ def addPage(request):
   context = {"cities": allCities}
   return render(request, "add.html", context)
 
+def addMeasure(request):
+ if request.method == "POST":
+  _cityId = request.POST["city"]
+  _city = City.objects.get(pk=_cityId)
+  _temp = request.POST["temp"]
+  _rain = request.POST["rain"]
+  _location = request.POST["location"]
+
+  #peldanyositunk es megadjuk a class ertekeit, hogy mi mit kapjon postolasnal
+  newWeather = WeatherData(city = _city, temperature = _temp, rainfall = _rain, location = _location)
+  newWeather.save() #adatbazisba kuldes
+  return redirect("/")
+
+
+def deleteMeasure(requrest, measureid):
+  if requrest.method == "POST":
+    print(measureid)
+    current = WeatherData.objects.get(pk=measureid)
+    current.delete()
+  return redirect('/')
