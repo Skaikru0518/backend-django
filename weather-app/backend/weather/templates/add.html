@@ -10,7 +10,7 @@
           {% for city in cities %}
           <option value="{{city.id}}">{{city.cityName}}</option>
           {% endfor %}
-          <option action="addNew">Add new city</option>
+          <option value="addNew">Add new city</option>
         </select>
       </label>
       <input type="text" name="newCity" id="newCity" hidden />
@@ -41,13 +41,8 @@
     let citySelect = document.getElementById("city");
     let newCityInput = document.getElementById("newCity");
 
-    // Either check the selected option's text
-    newCityInput.hidden =
-      citySelect.options[citySelect.selectedIndex].text !== "Add new city";
-
-    // Or use an index check
-    newCityInput.hidden =
-      citySelect.selectedIndex !== citySelect.options.length - 1;
+    // Simplified and corrected version
+    newCityInput.hidden = citySelect.value !== "addNew";
   }
 </script>
 {% endblock content %}

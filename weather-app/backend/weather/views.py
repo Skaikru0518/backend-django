@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_protect
 from .models import City, WeatherData
 
 # Create your views here.
-
+@csrf_protect
 def indexPage(request):
   #lekerdezzuk a mereseket: select * from weatherData orderby measuretime desc
   allDatas = WeatherData.objects.all().order_by("-measureTime")
@@ -18,7 +19,14 @@ def addPage(request):
 def addMeasure(request):
  if request.method == "POST":
   _cityId = request.POST["city"]
-  _city = City.objects.get(pk=_cityId)
+  _city = None
+  if _cityId == "addNew":
+    _newCity = request.POST["newCity"]
+    newCity = City(cityName = _newCity, capital = False)
+    newCity.save()
+    _city = newCity
+  else:
+    _city = City.objects.get(pk=_cityId)
   _temp = request.POST["temp"]
   _rain = request.POST["rain"]
   _location = request.POST["location"]
@@ -31,7 +39,6 @@ def addMeasure(request):
 
 def deleteMeasure(requrest, measureid):
   if requrest.method == "POST":
-    print(measureid)
-    current = WeatherData.objects.get(pk=measureid)
+    current = WeatherData.objects.get(pk = measureid)
     current.delete()
   return redirect('/')
