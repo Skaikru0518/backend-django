@@ -1,6 +1,5 @@
 py -m venv .
 scripts\activate
-pip install django or requirements
-
+pip install django or -r requirements
 
 (pip freeze -> requirements.txt)
