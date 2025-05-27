@@ -1,6 +1,6 @@
-*/Include/
-*/Lib/
-*/Scripts/
+*/Include/*
+*/Lib/*
+*/Scripts/*
 */pyvenv.cfg
-*/myvenv/
-*/__pycache__
+*/myvenv/*
+__pycache__

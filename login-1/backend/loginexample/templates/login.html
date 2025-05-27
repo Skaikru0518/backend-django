@@ -1,0 +1,9 @@
+{% extends "base.html" %} {% block content %}
+<div>
+  <p>{{message}}</p>
+  <form method="post">
+    {% csrf_token %} {{loginform.as_p}}
+    <button type="submit">Login</button>
+  </form>
+</div>
+{% endblock content %}
