@@ -3,11 +3,15 @@ from . import forms
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from .models import Image
+from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 #@login_required
 def home_page(request):
-  return render(request, "index.html")
+  images = Image.objects.all().order_by("-uploaded")
+  context = {"images": images}
+  return render(request, "index.html", context=context)
 
 def login_page(request):
   loginform = forms.LoginForm()
@@ -52,3 +56,23 @@ def register_user(request):
       newUser.set_password(password)
       newUser.save()
       return redirect("/")
+    
+def upload(request):
+  if request.method == "POST" and request.FILES["imageURL"]:
+    _title = request.POST["title"]
+    _image = request.FILES["imageURL"]
+    fs = FileSystemStorage()
+    _imageFile = fs.save(_image.name, _image)
+    _user = request.user
+    _private = "private" in request.POST
+    newImage = Image(title = _title, imageURL = _imageFile, user = _user, private = _private)
+    newImage.save()
+    return redirect('/')
+  
+def setprivate(request):
+  if request.method == "POST":
+    currentId = request.POST["current"]
+    currentImage = Image.objects.get(pk=currentId)
+    currentImage.private = not currentImage.private
+    currentImage.save()
+    return redirect("/")

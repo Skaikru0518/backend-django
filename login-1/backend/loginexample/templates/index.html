@@ -1,3 +1,55 @@
-{% extends "base.html" %} {% block content %}
-<div>You are at the home page!</div>
+{% extends "base.html" %}
+{% block content %}
+  <h1>Images</h1>
+  <h2>Upload images</h2>
+  <form action="{% url "loginexample:upload" %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>
+      <label>Title: <input type="text" name="title" id="title" /></label>
+    </p>
+    <p>
+      <label>Image file: <input type="file" name="imageURL" id="imageFile" /></label>
+    </p>
+    <p>
+      <label>Private <input type="checkbox" name="private" id="private" /></label>
+    </p>
+    <p><input type="submit" value="Upload image" /></p>
+  </form>
+
+  <div class="row">
+    {% for image in images %}
+      {% if not image.private or image.user == request.user or request.user.is_staff %}
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="card" style="height:450px">
+            <img class="card-img-top" src="media/{{ image.imageURL }}" alt="img" />
+            <div class="card-body">
+              <h4 class="card-title">{{ image.title }}</h4>
+              <p class="card-text">
+                Uploaded by: {{ image.user.username }}<br />
+                Upload date: {{ image.uploaded }} <br>
+                This image is 
+                {% if image.private %}
+                  private
+                {% else %}
+                  public
+                {% endif %}
+              </p>
+              <form action="{% url "loginexample:setprivate" %}" method="POST">
+                {% if image.user == request.user %}
+                {% csrf_token %}
+                  <button class="btn btn-primary" name="current" value="{{image.id}}">
+                    {% if image.private %}
+                      set public
+                    {% else %}
+                      set private
+                    {% endif %}
+                  </button>
+                {% endif %}
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
 {% endblock content %}
